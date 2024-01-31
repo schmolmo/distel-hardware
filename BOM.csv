@@ -17,3 +17,6 @@ ID,Bezeichner,Stückzahl,Bezeichnung,Manufacturer Part No.,Mouser
 16,J3,1,Mini-DIN-6 Socket,TE Connectivity 5749266-1,571-5749266-1
 17,U2,1,ATmega8-16PU,,
 18,D1,1,1N914,,
+19,KNOBS,4,Knob 33.5mm,MF-A04,
+20,U2 Socket,1,DIP-28 Socket,,
+21,U1 Socket,1,DIP-4 Socket,,
