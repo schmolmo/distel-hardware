@@ -47,7 +47,7 @@ byte adress;
 int enc0CC, enc1CC, enc2CC, enc3CC, enc4CC, enc5CC, enc6CC, enc7CC;
 int keyboardStatusCC, keyboardCodeCC;
 
-
+unsigned long nextMillis;
 
 void setup() {
   pinMode(PIN_PD4, INPUT_PULLUP);
@@ -118,6 +118,7 @@ void loop() {
 
    readMIDI();
 
+
   if (keyboard.available()) {
     code = keyboard.read();
     readMIDI();
@@ -125,11 +126,16 @@ void loop() {
     if (code > 0) {
      // MIDI.sendNoteOn(code >> 8, code & 0xFF, adress);
      MIDI.sendControlChange(keyboardStatusCC, code >> 8, adress);
-      MIDI.sendControlChange(keyboardCodeCC, code & 0xFF, adress);
+     MIDI.sendControlChange(keyboardCodeCC, code & 0xFF, adress);
     }
   }
+ 
 
   readMIDI();
+
+  if( millis() >= nextMillis ) {
+        digitalWrite(PIN_PC5, LOW);
+  }
 
 }
 
@@ -139,9 +145,7 @@ void readMIDI() {
   switch(MIDI.getType()) {
     case midi::NoteOn:
       digitalWrite(PIN_PC5, HIGH);
-    break;
-    case midi::NoteOff:
-      digitalWrite(PIN_PC5, LOW);
+      nextMillis = millis() +  (MIDI.getData1() * 8);
     break;
     }
   }
