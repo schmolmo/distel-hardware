@@ -48,6 +48,7 @@ int enc0CC, enc1CC, enc2CC, enc3CC, enc4CC, enc5CC, enc6CC, enc7CC;
 int keyboardStatusCC, keyboardCodeCC;
 
 unsigned long nextMillis;
+unsigned long nextMillisEnc;
 
 void setup() {
   pinMode(PIN_PD4, INPUT_PULLUP);
@@ -77,49 +78,37 @@ void setup() {
 int result = 0;
 void loop() {
 
+if(millis() >= nextMillisEnc) {
   if (digitalRead(PIN_PD4)) {
     
     result = en0.readAndReset();
     if (result != 0) { MIDI.sendControlChange(0, 64 - result, adress); }
-    readMIDI();
 
     result = en1.readAndReset();
     if (result != 0) { MIDI.sendControlChange(1, 64 - result, adress); }
-    readMIDI();
     
     result = en2.readAndReset();
     if (result != 0) { MIDI.sendControlChange(2, 64 - result, adress); }
-     readMIDI();
 
     
     result = en3.readAndReset();
     if (result != 0) { MIDI.sendControlChange(3, 64 - result, adress); }
-    readMIDI();
 
     
   } else {
     result = en0.readAndReset();
     if (result != 0) { MIDI.sendControlChange(4, 64 - result, adress); }
-      readMIDI();
 
     result = en1.readAndReset();
     if (result != 0) { MIDI.sendControlChange(5, 64 - result, adress); }
-      readMIDI();
 
     result = en2.readAndReset();
     if (result != 0) { MIDI.sendControlChange(6, 64 - result, adress); }
-      readMIDI();
 
     result = en3.readAndReset();
     if (result != 0) { MIDI.sendControlChange(7, 64 - result, adress); }
-      readMIDI();
-
   }
-
-   readMIDI();
-
-
-  if (keyboard.available()) {
+ if (keyboard.available()) {
     code = keyboard.read();
     readMIDI();
 
@@ -130,8 +119,16 @@ void loop() {
     }
   }
  
+  nextMillisEnc = millis() + 100;
+}
+
+  en0.read();
+  en1.read();
+  en2.read();
+  en3.read();
 
   readMIDI();
+
 
   if( millis() >= nextMillis ) {
         digitalWrite(PIN_PC5, LOW);
