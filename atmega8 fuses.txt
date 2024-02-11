@@ -1,0 +1,4 @@
+AVR ATMEGA8 FUSES
+
+Low: 0x3f
+High: 0xc7
